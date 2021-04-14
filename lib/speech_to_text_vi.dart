@@ -12,9 +12,11 @@ class MicSheet extends StatefulWidget {
   final BuildContext context;
   final String title;
   final ValueSetter<String> resultSpeech;
+  final double sheetHeight;
   MicSheet(
       {required this.context,
       required this.resultSpeech,
+      this.sheetHeight = 250,
       this.title = 'Vui lòng chạm vào mic để nói'});
   @override
   _MicSheetState createState() => _MicSheetState();
@@ -65,6 +67,7 @@ class _MicSheetState extends State<MicSheet> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
+        height: widget.sheetHeight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
