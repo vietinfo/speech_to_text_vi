@@ -187,7 +187,7 @@ class _MicSheetState extends State<MicSheet> {
 
   void _statusListener(String status) {
     Future.delayed(Duration(seconds: 5)).then((value) {
-      if (_speech.isNotListening && status == 'notListening') {
+      if (_speech.isNotListening && status == 'notListening' && mounted) {
         Navigator.pop(widget.context);
       }
     });
