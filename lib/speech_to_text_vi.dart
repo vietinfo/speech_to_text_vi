@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -44,7 +45,11 @@ class _MicSheetState extends State<MicSheet> {
   @override
   void initState() {
     _speech = SpeechToText();
-    initSpeechState();
+
+    SchedulerBinding.instance!.addPostFrameCallback((_) async {
+      await initSpeechState();
+    });
+
     // TODO: implement initState
     super.initState();
   }
