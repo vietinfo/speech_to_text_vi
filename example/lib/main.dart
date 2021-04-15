@@ -49,17 +49,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return MicSheet(
-          context: this.context,
-          resultSpeech: (value) => _getData(value),
-        );
-      },
-    );
-  }
+  // void _incrementCounter() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: Colors.transparent,
+  //     barrierColor: Colors.transparent,
+  //     builder: (context) {
+  //       return MicSheet(
+  //         context: this.context,
+  //         resultSpeech: (value) => _getData(value),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () =>
+            showMicSheet(homeContext: this.context, resultSpeech: _getData),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
