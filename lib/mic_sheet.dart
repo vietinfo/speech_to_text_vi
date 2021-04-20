@@ -16,7 +16,7 @@ class MicSheet extends StatefulWidget {
   MicSheet(
       {required this.context,
       required this.resultSpeech,
-      this.sheetHeight = 250,
+      this.sheetHeight = 300,
       this.title = 'Vui lòng chạm vào mic để nói'});
   @override
   _MicSheetState createState() => _MicSheetState();
@@ -24,11 +24,7 @@ class MicSheet extends StatefulWidget {
 
 class _MicSheetState extends State<MicSheet> {
   late SpeechToText _speech;
-  bool _hasSpeech = false;
   String _currentLocaleId = 'vi_VN';
-  double _level = 0.0;
-  double _minSoundLevel = 50000;
-  double _maxSoundLevel = -50000;
 
   bool _animation = false;
   String _textResult = '';
@@ -79,85 +75,108 @@ class _MicSheetState extends State<MicSheet> {
           child: Container(
             color: Colors.transparent,
             height: widget.sheetHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Stack(
+              alignment: Alignment.topCenter,
               children: [
-                Text(
-                  widget.title,
-                  style: TextStyle(fontSize: 18, color: Colors.blue),
-                ),
-                AvatarGlow(
-                    animate: _animation,
-                    endRadius: 60,
-                    repeat: true,
-                    showTwoGlows: true,
-                    duration: Duration(milliseconds: 2000),
-                    glowColor: Colors.blue,
-                    repeatPauseDuration: Duration(milliseconds: 100),
-                    child: GestureDetector(
-                      onTap: () {
-                        _initSpeechState();
-                      },
-                      child: Material(
-                        // Replace this child with your own
-                        elevation: 8.0,
-                        shape: CircleBorder(),
-                        child: CircleAvatar(
-                          backgroundColor:
-                              !_animation ? Colors.red : Colors.blue,
-                          child: Icon(
-                            _animation
-                                ? Icons.keyboard_voice
-                                : Icons.keyboard_voice_outlined,
-                            color: Colors.white,
-                            size: 40,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: TextStyle(fontSize: 18, color: Colors.blue),
+                    ),
+                    AvatarGlow(
+                        animate: _animation,
+                        endRadius: 60,
+                        repeat: true,
+                        showTwoGlows: true,
+                        duration: Duration(milliseconds: 2000),
+                        glowColor: Colors.blue,
+                        repeatPauseDuration: Duration(milliseconds: 100),
+                        child: GestureDetector(
+                          onTap: () {
+                            _initSpeechState();
+                          },
+                          child: Material(
+                            // Replace this child with your own
+                            elevation: 8.0,
+                            shape: CircleBorder(),
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  !_animation ? Colors.red : Colors.blue,
+                              child: Icon(
+                                _animation
+                                    ? Icons.keyboard_voice
+                                    : Icons.keyboard_voice_outlined,
+                                color: Colors.white,
+                                size: 40,
+                              ),
+                              radius: 40.0,
+                            ),
                           ),
-                          radius: 40.0,
-                        ),
-                      ),
-                      // Container(
-                      //   height: 80,
-                      //   width: 80,
-                      //   decoration: BoxDecoration(
-                      //     shape: BoxShape.circle,
-                      //     color: (_animation == false) ? Colors.red : Colors.blue,
-                      //   ),
-                      //   child: Icon(
-                      //     _animation
-                      //         ? Icons.keyboard_voice
-                      //         : Icons.keyboard_voice_outlined,
-                      //     color: Colors.white,
-                      //     size: 40,
-                      //   ),
-                      // ),
-                    )),
-                StreamBuilder(
-                    stream: _timeCountStreamController.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text('00:${_start.toString().padLeft(2, '0')}',
-                            style: TextStyle(color: Colors.red));
-                      } else {
-                        return Text('00:${_start.toString().padLeft(2, '0')}',
-                            style: TextStyle(color: Colors.red));
-                      }
-                    }),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: StreamBuilder(
-                      stream: _textResultStreamController.stream,
-                      builder: (context, AsyncSnapshot<String> snapshot) {
-                        if (snapshot.hasData) {
-                          _textResult = snapshot.data!;
-                          return Text(
-                            _textResult,
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          );
-                        } else {
-                          return SizedBox.shrink();
-                        }
-                      }),
+                          // Container(
+                          //   height: 80,
+                          //   width: 80,
+                          //   decoration: BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //     color: (_animation == false) ? Colors.red : Colors.blue,
+                          //   ),
+                          //   child: Icon(
+                          //     _animation
+                          //         ? Icons.keyboard_voice
+                          //         : Icons.keyboard_voice_outlined,
+                          //     color: Colors.white,
+                          //     size: 40,
+                          //   ),
+                          // ),
+                        )),
+                    StreamBuilder(
+                        stream: _timeCountStreamController.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                                '00:${_start.toString().padLeft(2, '0')}',
+                                style: TextStyle(color: Colors.red));
+                          } else {
+                            return Text(
+                                '00:${_start.toString().padLeft(2, '0')}',
+                                style: TextStyle(color: Colors.red));
+                          }
+                        }),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: StreamBuilder(
+                          stream: _textResultStreamController.stream,
+                          builder: (context, AsyncSnapshot<String> snapshot) {
+                            if (snapshot.hasData) {
+                              _textResult = snapshot.data!;
+                              return Text(
+                                _textResult,
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          }),
+                    ),
+                  ],
                 ),
+                Positioned(
+                  bottom: 5,
+                  right: 5,
+                  child: IconButton(
+                      iconSize: widget.sheetHeight * 0.1,
+                      icon: Icon(
+                        Icons.send,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () {
+                        if (mounted)
+                          Navigator.of(widget.context, rootNavigator: true)
+                              .pop();
+                      }),
+                )
               ],
             ),
           ),
@@ -174,7 +193,6 @@ class _MicSheetState extends State<MicSheet> {
           onError: (errorNotification) => _errorListener(errorNotification),
           debugLogging: true);
       if (hasSpeech) {
-        _hasSpeech = hasSpeech;
         _startListening();
         setState(() {
           _animation = true;
@@ -195,14 +213,14 @@ class _MicSheetState extends State<MicSheet> {
   }
 
   void _statusListener(String status) {
-    Future.delayed(Duration(seconds: 5)).then((value) {
-      if (_speech.isNotListening && status == 'notListening') {
-        Navigator.pop(widget.context);
-      }
-    });
-
-    print(
-        'Received listener status: $status, listening: ${_speech.isListening}');
+    // Future.delayed(Duration(seconds: 5)).then((value) {
+    //   if (_speech.isNotListening && status == 'notListening' && this.mounted) {
+    //     Navigator.of(widget.context, rootNavigator: true).pop();
+    //   }
+    // });
+    //
+    // print(
+    //     'Received listener status: $status, listening: ${_speech.isListening}');
   }
 
   void _startListening() {
