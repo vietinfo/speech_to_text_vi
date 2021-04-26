@@ -25,7 +25,7 @@ jobs:
         id: analysis
         
         with:
-          githubToken: ${{ secrets.GIT_TOKEN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # You can then use this id to retrieve the outputs in the next steps.
       # The following step shows how to exit the workflow with an error if the total score in percentage is below 50:
