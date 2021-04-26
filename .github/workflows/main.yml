@@ -25,4 +25,4 @@ jobs:
           # Required:
           githubToken: ${{ secrets.GIT_TOKEN }}
           # Optional:
-          relativePath: packages/lib/
+          # relativePath: packages/lib/
