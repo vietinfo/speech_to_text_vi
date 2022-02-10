@@ -2,7 +2,7 @@ name: speech_to_text_vi
 description: A new Flutter package.
 version: 0.0.2
 author:
-homepage:
+homepage: https://github.com/vietinfo/flutter_plugin_camera.git
 publish_to: none
 
 environment:
@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  speech_to_text: ^4.1.0-nullsafety
-  avatar_glow: ^2.0.1
+  speech_to_text: ^5.4.2
+  avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:
