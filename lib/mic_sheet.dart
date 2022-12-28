@@ -165,7 +165,7 @@ class _MicSheetState extends State<MicSheet> {
                         color: Colors.blue,
                       ),
                       onPressed: () {
-                        if (mounted) Navigator.of(widget.context, rootNavigator: true).pop();
+                        if (mounted) Navigator.of(widget.context, rootNavigator: true).pop(_textResult);
                       }),
                 )
               ],
