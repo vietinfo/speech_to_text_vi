@@ -13,11 +13,14 @@ class MicSheet extends StatefulWidget {
   final String title;
   final ValueSetter<String> resultSpeech;
   final double sheetHeight;
-  MicSheet(
-      {required this.context,
-      required this.resultSpeech,
-      this.sheetHeight = 300,
-      this.title = 'Vui lòng chạm vào mic để nói'});
+  final Function(String status)? status;
+  MicSheet({
+    required this.context,
+    required this.resultSpeech,
+    this.sheetHeight = 300,
+    this.title = 'Vui lòng chạm vào mic để nói',
+    this.status,
+  });
   @override
   _MicSheetState createState() => _MicSheetState();
 }
@@ -31,11 +34,9 @@ class _MicSheetState extends State<MicSheet> {
   Timer? _timer;
   int _start = 59;
 
-  final StreamController<String> _textResultStreamController =
-      StreamController<String>();
+  final StreamController<String> _textResultStreamController = StreamController<String>();
 
-  final StreamController<int> _timeCountStreamController =
-      StreamController<int>();
+  final StreamController<int> _timeCountStreamController = StreamController<int>();
 
   @override
   void initState() {
@@ -102,12 +103,9 @@ class _MicSheetState extends State<MicSheet> {
                             elevation: 8.0,
                             shape: CircleBorder(),
                             child: CircleAvatar(
-                              backgroundColor:
-                                  !_animation ? Colors.red : Colors.blue,
+                              backgroundColor: !_animation ? Colors.red : Colors.blue,
                               child: Icon(
-                                _animation
-                                    ? Icons.keyboard_voice
-                                    : Icons.keyboard_voice_outlined,
+                                _animation ? Icons.keyboard_voice : Icons.keyboard_voice_outlined,
                                 color: Colors.white,
                                 size: 40,
                               ),
@@ -134,13 +132,9 @@ class _MicSheetState extends State<MicSheet> {
                         stream: _timeCountStreamController.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text(
-                                '00:${_start.toString().padLeft(2, '0')}',
-                                style: TextStyle(color: Colors.red));
+                            return Text('00:${_start.toString().padLeft(2, '0')}', style: TextStyle(color: Colors.red));
                           } else {
-                            return Text(
-                                '00:${_start.toString().padLeft(2, '0')}',
-                                style: TextStyle(color: Colors.red));
+                            return Text('00:${_start.toString().padLeft(2, '0')}', style: TextStyle(color: Colors.red));
                           }
                         }),
                     Padding(
@@ -152,8 +146,7 @@ class _MicSheetState extends State<MicSheet> {
                               _textResult = snapshot.data!;
                               return Text(
                                 _textResult,
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                style: TextStyle(fontSize: 20, color: Colors.black),
                               );
                             } else {
                               return SizedBox.shrink();
@@ -172,9 +165,7 @@ class _MicSheetState extends State<MicSheet> {
                         color: Colors.blue,
                       ),
                       onPressed: () {
-                        if (mounted)
-                          Navigator.of(widget.context, rootNavigator: true)
-                              .pop();
+                        if (mounted) Navigator.of(widget.context, rootNavigator: true).pop();
                       }),
                 )
               ],
@@ -189,7 +180,7 @@ class _MicSheetState extends State<MicSheet> {
     if (!_animation) {
       bool hasSpeech = await _speech.initialize(
           finalTimeout: Duration(seconds: 5),
-          onStatus: (status) => _statusListener(status),
+          onStatus: widget.status,
           onError: (errorNotification) => _errorListener(errorNotification),
           debugLogging: true);
       if (hasSpeech) {
